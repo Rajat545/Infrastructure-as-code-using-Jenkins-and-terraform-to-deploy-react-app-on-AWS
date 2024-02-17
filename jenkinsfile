@@ -1,0 +1,62 @@
+pipeline {
+    agent any
+    
+    triggers {
+        cron('* * * * *')  // Schedule the pipeline to run every minute
+    }
+
+    environment {
+        DOCKER_IMAGE_NAME = 'your-react-app'   
+        CONTAINER_NAME = 'react-container'     
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    git 'https://github.com/your/react-app.git'    # paste here your github repository
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Build Docker image using the provided Dockerfile
+                    docker.build("${DOCKER_IMAGE_NAME}")
+                }
+            }
+        }
+
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    // Run Docker container based on the built image
+                    docker.image("${DOCKER_IMAGE_NAME}").withRun('-d -p 8080:80 --name ${CONTAINER_NAME}')
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Add deployment steps here if needed
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+        always {
+            // Cleanup steps, e.g., stop and remove the Docker container
+            script {
+                docker.stop("${CONTAINER_NAME}")
+                docker.remove("${CONTAINER_NAME}")
+            }
+        }
+    }
+}
