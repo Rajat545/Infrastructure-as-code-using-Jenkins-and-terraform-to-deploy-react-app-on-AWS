@@ -1,5 +1,5 @@
 
-**Step-by-Step Tutorial: Infrastructure as Code with Jenkins, Terraform, and GitLab for AWS Deployment**
+**Step-by-Step Tutorial: Infrastructure as Code with Jenkins, Terraform, and deploy react code in minikube on AWS Deployment**
 
 This tutorial guides you through setting up a jenkins pipeline to deploy a React web application on AWS using Jenkins, Terraform, and kubernetes cluster.
 
